@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { protectedProcedure, router } from "../trpc";
+import { protectedProcedure, router, publicProcedure } from "../trpc";
 
 export const guestbook = router({
   postMessage: protectedProcedure
@@ -21,4 +21,23 @@ export const guestbook = router({
         console.log(error);
       }
     }),
+});
+
+export const guestbookRouter = router({
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    try {
+      await ctx.prisma.guestbook.findMany({
+        select: {
+          name: true,
+          message: true,
+        },
+
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
+  }),
 });
