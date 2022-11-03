@@ -8,8 +8,8 @@ export const guestbook = router({
         name: z.string(),
         message: z.string(),
       })
-    )
-    .mutation(async ({ ctx, input }) => {
+    ).mutation(async ({ ctx, input }) => {
+    
       try {
         await ctx.prisma.guestbook.create({
           data: {
@@ -26,7 +26,7 @@ export const guestbook = router({
 export const guestbookRouter = router({
   getAll: publicProcedure.query(async ({ ctx }) => {
     try {
-      await ctx.prisma.guestbook.findMany({
+      return await ctx.prisma.guestbook.findMany({
         select: {
           name: true,
           message: true,
